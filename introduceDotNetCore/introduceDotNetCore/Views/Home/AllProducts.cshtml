@@ -1,0 +1,20 @@
+﻿@model IEnumerable<Product>
+@{
+    ViewData["Title"] = "AllProducts";
+}
+
+<h1>All Products</h1>
+<div>
+    <div>
+        @foreach (var item in Model)
+        {
+            <div>
+                <h3>@item.Name</h3>
+                <p>@item.Description</p>
+                <p>@item.Price</p>
+            </div>
+        }
+    </div>
+</div>
+
+

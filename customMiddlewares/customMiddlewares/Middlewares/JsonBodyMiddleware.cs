@@ -1,4 +1,6 @@
-﻿namespace customMiddlewares.Middlewares
+﻿using System.Text;
+
+namespace customMiddlewares.Middlewares
 {
     public class JsonBodyMiddleware
     {
@@ -17,11 +19,18 @@
 
             if (context.Request.Method == "POST" && context.Request.ContentType.StartsWith("application/json"))
             {
-                using var streamReader = new StreamReader(context.Request.Body);
-                var jsonBody = await streamReader.ReadToEndAsync();
-                context.Items["jsonBody"] = jsonBody;
+                //using var streamReader = new StreamReader(context.Request.Body);
+                //var jsonBody = await streamReader.ReadToEndAsync();
+                var requestBody = new StreamReader(context.Request.BodyReader.AsStream()).ReadToEnd();
+                var content = Encoding.UTF8.GetBytes(requestBody);
+                var requestBodyStream = new MemoryStream();
+                requestBodyStream.Seek(0, SeekOrigin.Begin);
+                requestBodyStream.Write(content, 0, content.Length);
+                context.Request.Body = requestBodyStream;
+                context.Request.Body.Seek(0, SeekOrigin.Begin);
+                context.Items["jsonBody"] = requestBody;
             }
-            context.Request.Body.Seek(0, SeekOrigin.Begin);
+
             await _next(context);
         }
     }

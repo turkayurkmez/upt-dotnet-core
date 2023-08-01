@@ -1,4 +1,5 @@
 ﻿using customMiddlewares.Extensions;
+using customMiddlewares.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,15 +44,13 @@ if (app.Environment.IsDevelopment())
 
 //app.UseMiddleware<JsonBodyMiddleware>();
 //app.UseMiddleware<BadWordsHandlerMiddleware>();
-//app.UseMiddleware<RequestLoggingMiddleware>();
+app.UseMiddleware<RequestLoggingMiddleware>();
 app.UseBadwordHandler();
 
 
 app.UseHttpsRedirection();
 
-
-
-//app.UseAuthorization();
+app.UseAuthorization();
 
 app.MapControllers();
 //app.UseWelcomePage();

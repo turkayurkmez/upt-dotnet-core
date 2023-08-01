@@ -1,0 +1,10 @@
+﻿@model ProductListDisplayResponse
+<div class="card">
+    <div class="card-body">
+        <img src="@Model.ImageUrl" class="img-fluid" />
+
+        <h3>@Model.Name</h3>
+        <p>@Model.Description @Model.Price yerine @(Model.Price * (1 - Model.Discount)) TL</p>
+        <button class="btn btn-danger">Sepete Ekle</button>
+    </div>
+</div>

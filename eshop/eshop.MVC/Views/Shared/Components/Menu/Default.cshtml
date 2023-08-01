@@ -1,0 +1,8 @@
+﻿@model IEnumerable<CategoryMenuResponse>
+<div class="list-group">
+    @foreach (var category in Model)
+    {
+         <a class="list-group-item">@category.Name</a>
+    }    
+   
+</div>

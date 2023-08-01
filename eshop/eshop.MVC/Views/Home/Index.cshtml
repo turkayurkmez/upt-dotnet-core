@@ -1,8 +1,25 @@
-﻿@{
+﻿@model IEnumerable<ProductListDisplayResponse>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row">
+    @foreach (var product in Model)
+    {
+        <div class="col-3">
+          <partial name="_productCard" model="product"/>
+        </div>
+    }
+ 
 </div>
+
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination">      
+        @for (int i = 1; i <= ViewBag.TotalPage; i++)
+        {
+            <li class="page-item"><a class="page-link" asp-action="Index" asp-route-pageNo="@i">@i</a></li>
+        }      
+       
+    </ul>
+</nav>

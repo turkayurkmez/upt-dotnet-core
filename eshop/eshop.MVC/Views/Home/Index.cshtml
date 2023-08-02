@@ -1,25 +1,25 @@
-﻿@model IEnumerable<ProductListDisplayResponse>
+﻿@model IndexViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="row">
-    @foreach (var product in Model)
+    @foreach (var product in Model.Products)
     {
         <div class="col-3">
-          <partial name="_productCard" model="product"/>
+            <partial name="_productCard" model="product" />
         </div>
     }
- 
+
 </div>
 
+@*<ul class="pagination">
+    @for (int i = 1; i <= ViewBag.TotalPage; i++)
+    {
+        <li class="page-item"><a class="page-link" asp-action="Index" asp-route-pageNo="@i">@i</a></li>
+    }
 
-<nav aria-label="Page navigation example">
-    <ul class="pagination">      
-        @for (int i = 1; i <= ViewBag.TotalPage; i++)
-        {
-            <li class="page-item"><a class="page-link" asp-action="Index" asp-route-pageNo="@i">@i</a></li>
-        }      
-       
-    </ul>
-</nav>
+</ul>
+*@
+
+<div page-model="@Model.PagingInfo" page-action="Index"></div>

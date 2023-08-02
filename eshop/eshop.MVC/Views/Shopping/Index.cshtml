@@ -1,0 +1,39 @@
+﻿@model ProductItemCollection
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Sepetiniz</h1>
+<table>
+    <thead>
+        <tr>
+            <th>
+                Ürün Adı
+            </th>
+            <th>Fiyatı</th>
+            <th>Adet</th>
+            <th>Ara Toplam</th>
+        </tr>
+      
+    </thead>
+    <tbody>
+        @foreach (var product in Model.ProductItems)
+        {
+            <tr>
+                <td>@product.Product.Name</td>
+                <td>@product.Product.Price</td>
+                <td>@product.Quantity</td>
+                <td>@(product.Product.Price * product.Quantity)</td>
+
+
+
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4">Toplam tutar : @Model.TotalPrice() TL </td>
+        </tr>
+    </tfoot>
+</table>
+

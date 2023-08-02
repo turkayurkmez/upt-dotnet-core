@@ -1,17 +1,24 @@
 using eshop.Application.MappingProfile;
 using eshop.Application.Services;
+using eshop.Infrastructure.Data;
 using eshop.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IProductRepository, FakeProductRepository>();
+builder.Services.AddScoped<IProductRepository, EFProductRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<ICategoryRepository, FakeCategoryRepository>();
+builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
 
 builder.Services.AddAutoMapper(typeof(MapProfile));
+var connectionString = builder.Configuration.GetConnectionString("db");
+builder.Services.AddDbContext<EshopDbContext>(option => option.UseSqlServer(connectionString));
+
+
+builder.Services.AddSession();
 
 
 var app = builder.Build();
@@ -26,6 +33,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseSession();
 
 app.UseRouting();
 

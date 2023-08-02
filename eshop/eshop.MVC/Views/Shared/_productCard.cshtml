@@ -5,6 +5,9 @@
 
         <h3>@Model.Name</h3>
         <p>@Model.Description @Model.Price yerine @(Model.Price * (1 - Model.Discount)) TL</p>
-        <button class="btn btn-danger">Sepete Ekle</button>
+        <form method="get" asp-action="Add" asp-controller="Shopping" asp-route-id="@Model.Id">
+            <button class="btn btn-danger">Sepete Ekle</button>
+        </form>
+
     </div>
 </div>

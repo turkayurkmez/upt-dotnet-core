@@ -1,12 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace eshop.Entities
+namespace eshop.Application.DataTransferObject.Requests
 {
-    public class Product : IEntity
+    public class CreateProductRequest
     {
-        public int Id { get; set; }
-
-        [Required]
+        [Required(ErrorMessage = "Ürün adı boş olamaz")]
+        [MinLength(2, ErrorMessage = "En az iki harf olmalı")]
         public string Name { get; set; }
         public string? Description { get; set; }
         public string? ImageUrl { get; set; } = "https://cdn.dsmcdn.com/ty922/product/media/images/20230530/18/371725042/263518095/1/1_org.jpg";
@@ -14,10 +13,5 @@ namespace eshop.Entities
         public decimal? Discount { get; set; }
 
         public int? StockCount { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public DateTime? UpdatedDate { get; set; }
-
-        public int? CategoryId { get; set; }
-        public Category? Category { get; set; }
     }
 }

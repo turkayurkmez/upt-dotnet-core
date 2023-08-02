@@ -19,16 +19,29 @@ namespace eshop.MVC.Controllers
         public IActionResult Index(int pageNo = 1)
         {
             var products = productService.GetProducts();
-            var total = products.Count();
-            var pageSize = 4;
-            var totalPage = Math.Ceiling((decimal)total / pageSize);
+            //var total = products.Count();
+            //var pageSize = 4;
+            //var totalPage = Math.Ceiling((decimal)total / pageSize);
+
+            PagingInfo pagingInfo = new PagingInfo
+            {
+                CurrentPage = pageNo,
+                PageSize = 4,
+                TotalItemsCount = products.Count()
+            };
 
             var paginatedProducts = products.OrderBy(p => p.Id)
-                                            .Skip((pageNo - 1) * pageSize)
-                                            .Take(pageSize);
+                                            .Skip((pageNo - 1) * pagingInfo.PageSize)
+                                            .Take(pagingInfo.PageSize);
 
-            ViewBag.TotalPage = totalPage;
-            return View(paginatedProducts);
+
+            IndexViewModel model = new IndexViewModel
+            {
+                Products = paginatedProducts,
+                PagingInfo = pagingInfo
+            };
+            //ViewBag.TotalPage = totalPage;
+            return View(model);
         }
 
         public IActionResult Privacy()

@@ -20,5 +20,12 @@ namespace eshop.Application.Services
             var categories = categoryRepository.GetAll();
             return mapper.Map<IEnumerable<CategoryMenuResponse>>(categories);
         }
+
+        public async Task<IEnumerable<CategoryMenuResponse>> GetCategoryMenusAsync()
+        {
+            var categories = await categoryRepository.GetAllAsync();
+            return mapper.Map<IEnumerable<CategoryMenuResponse>>(categories);
+
+        }
     }
 }

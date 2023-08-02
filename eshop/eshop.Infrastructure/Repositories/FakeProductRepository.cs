@@ -39,7 +39,7 @@ namespace eshop.Infrastructure.Repositories
 
         public Product Get(int id)
         {
-            throw new NotImplementedException();
+            return products.Find(p => p.Id == id);
         }
 
         public IEnumerable<Product> GetAll()

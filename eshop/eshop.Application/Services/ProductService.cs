@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using eshop.Application.DataTransferObject.Requests;
 using eshop.Application.DataTransferObject.Responses;
+using eshop.Entities;
 using eshop.Infrastructure.Repositories;
 
 namespace eshop.Application.Services
@@ -14,6 +16,23 @@ namespace eshop.Application.Services
         {
             this.productRepository = productRepository;
             this.mapper = mapper;
+        }
+
+        public async Task<int> CreateNewProductAstnc(CreateProductRequest request)
+        {
+            var product = mapper.Map<Product>(request);
+            await productRepository.CreateNewAsync(product);
+            return product.Id;
+        }
+
+        public ProductListDisplayResponse GetProduct(int id)
+        {
+            return mapper.Map<ProductListDisplayResponse>(productRepository.Get(id));
+        }
+
+        public async Task<ProductListDisplayResponse> GetProductAsync(int id)
+        {
+            return mapper.Map<ProductListDisplayResponse>(await productRepository.GetAsync(id));
         }
 
         public IEnumerable<ProductListDisplayResponse> GetProducts()
@@ -32,9 +51,22 @@ namespace eshop.Application.Services
             return mapper.Map<IEnumerable<ProductListDisplayResponse>>(products);
         }
 
-        public Task<IEnumerable<ProductListDisplayResponse>> GetProductsAsync()
+        public async Task<IEnumerable<ProductListDisplayResponse>> GetProductsAsync()
         {
-            throw new NotImplementedException();
+            return mapper.Map<IEnumerable<ProductListDisplayResponse>>(await productRepository.GetAllAsync());
+        }
+
+        public async Task<IEnumerable<ProductListDisplayResponse>> GetProductsByNameAsync(string name)
+        {
+            return mapper.Map<IEnumerable<ProductListDisplayResponse>>(await productRepository.SearchProductsByNameAsync(name));
+
+        }
+
+        public async Task<int> UpdateProductAsync(UpdateProductRequest request)
+        {
+            var product = mapper.Map<Product>(request);
+            await productRepository.UpdateAsync(product);
+            return product.Id;
         }
     }
 }

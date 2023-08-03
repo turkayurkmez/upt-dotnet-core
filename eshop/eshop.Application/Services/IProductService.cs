@@ -16,6 +16,8 @@ namespace eshop.Application.Services
         Task<int> CreateNewProductAstnc(CreateProductRequest request);
         Task<int> UpdateProductAsync(UpdateProductRequest request);
 
+        Task<bool> IsProductExists(int id);
+
 
 
 

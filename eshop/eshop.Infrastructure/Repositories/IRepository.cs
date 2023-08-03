@@ -18,5 +18,7 @@ namespace eshop.Infrastructure.Repositories
         void Update(T entity);
         Task UpdateAsync(T entity);
 
+        Task<bool> IsExistsAsync(int id);
+
     }
 }

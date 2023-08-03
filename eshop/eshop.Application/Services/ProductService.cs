@@ -62,6 +62,11 @@ namespace eshop.Application.Services
 
         }
 
+        public async Task<bool> IsProductExists(int id)
+        {
+            return await productRepository.IsExistsAsync(id);
+        }
+
         public async Task<int> UpdateProductAsync(UpdateProductRequest request)
         {
             var product = mapper.Map<Product>(request);

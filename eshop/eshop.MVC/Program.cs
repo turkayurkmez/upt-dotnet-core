@@ -1,24 +1,35 @@
-using eshop.Application.MappingProfile;
-using eshop.Application.Services;
-using eshop.Infrastructure.Data;
-using eshop.Infrastructure.Repositories;
+using eshop.Common.Extensions;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IProductRepository, EFProductRepository>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
 
-builder.Services.AddAutoMapper(typeof(MapProfile));
 var connectionString = builder.Configuration.GetConnectionString("db");
-builder.Services.AddDbContext<EshopDbContext>(option => option.UseSqlServer(connectionString));
+builder.Services.AddIoCAndMapping(connectionString);
+//builder.Services.AddScoped<IProductService, ProductService>();
+//builder.Services.AddScoped<IProductRepository, EFProductRepository>();
+//builder.Services.AddScoped<ICategoryService, CategoryService>();
+//builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
+//builder.Services.AddScoped<IUserService, UserService>();
+
+//builder.Services.AddAutoMapper(typeof(MapProfile));
+
+//builder.Services.AddDbContext<EshopDbContext>(option => option.UseSqlServer(connectionString));
 
 
 builder.Services.AddSession();
+
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(option =>
+                {
+                    option.LoginPath = "/Users/Login";
+                    option.ReturnUrlParameter = "gidilecekSayfa";
+                    option.AccessDeniedPath = "/Users/AccessDenied";
+                });
 
 
 var app = builder.Build();
@@ -37,6 +48,7 @@ app.UseSession();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

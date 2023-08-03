@@ -57,6 +57,11 @@ namespace eshop.Infrastructure.Repositories
             return await dbContext.Products.FindAsync(id);
         }
 
+        public async Task<bool> IsExistsAsync(int id)
+        {
+            return await dbContext.Products.AnyAsync(p => p.Id == id);
+        }
+
         public IEnumerable<Product> SearchProductsByName(string name)
         {
             throw new NotImplementedException();

@@ -57,6 +57,11 @@ namespace eshop.Infrastructure.Repositories
             return await eshopDbContext.Categories.SingleOrDefaultAsync(c => c.Id == id);
         }
 
+        public Task<bool> IsExistsAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Update(Category entity)
         {
             throw new NotImplementedException();

@@ -13,5 +13,6 @@ namespace eshop.Application.DataTransferObject.Requests
         public decimal? Discount { get; set; }
 
         public int? StockCount { get; set; }
+        public int? CategoryId { get; set; }
     }
 }

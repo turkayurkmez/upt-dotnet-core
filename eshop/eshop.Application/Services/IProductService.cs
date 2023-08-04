@@ -17,7 +17,7 @@ namespace eshop.Application.Services
         Task<int> UpdateProductAsync(UpdateProductRequest request);
 
         Task<bool> IsProductExists(int id);
-
+        Task DeleteProduct(int id);
 
 
 

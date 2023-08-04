@@ -25,6 +25,11 @@ namespace eshop.Application.Services
             return product.Id;
         }
 
+        public async Task DeleteProduct(int id)
+        {
+            await productRepository.DeleteAsync(id);
+        }
+
         public ProductListDisplayResponse GetProduct(int id)
         {
             return mapper.Map<ProductListDisplayResponse>(productRepository.Get(id));

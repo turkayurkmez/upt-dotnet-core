@@ -1,5 +1,4 @@
 ﻿using customMiddlewares.Extensions;
-using customMiddlewares.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,9 +41,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseMiddleware<JsonBodyMiddleware>();
-//app.UseMiddleware<BadWordsHandlerMiddleware>();
-app.UseMiddleware<RequestLoggingMiddleware>();
+
 app.UseBadwordHandler();
 
 

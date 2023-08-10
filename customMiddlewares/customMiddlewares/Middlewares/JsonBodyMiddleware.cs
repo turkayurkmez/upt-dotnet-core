@@ -2,8 +2,11 @@
 
 namespace customMiddlewares.Middlewares
 {
+
     public class JsonBodyMiddleware
     {
+
+
         /*
          * Eğer bir http request nesnesi POST metodu ile çalışmış ve bu request'de JSON bir veri varsa daha sonra işlemek üzere bu veriyi ayır!
          */
@@ -14,24 +17,74 @@ namespace customMiddlewares.Middlewares
             _next = next;
         }
 
+
+
         public async Task Invoke(HttpContext context)
         {
 
-            if (context.Request.Method == "POST" && context.Request.ContentType.StartsWith("application/json"))
+            if (isAvailableForFilter(context))
             {
-                //using var streamReader = new StreamReader(context.Request.Body);
-                //var jsonBody = await streamReader.ReadToEndAsync();
-                var requestBody = new StreamReader(context.Request.BodyReader.AsStream()).ReadToEnd();
-                var content = Encoding.UTF8.GetBytes(requestBody);
-                var requestBodyStream = new MemoryStream();
-                requestBodyStream.Seek(0, SeekOrigin.Begin);
-                requestBodyStream.Write(content, 0, content.Length);
-                context.Request.Body = requestBodyStream;
-                context.Request.Body.Seek(0, SeekOrigin.Begin);
-                context.Items["jsonBody"] = requestBody;
+                var jsonRequestBody = await getJsonRequestBody(context);
+                if (!string.IsNullOrEmpty(jsonRequestBody))
+                {
+                    replaceRequestBodyWithJsonStream(context, jsonRequestBody);
+                    saveJsonToContextItem(context, jsonRequestBody);
+                }
+
             }
 
             await _next(context);
         }
+
+        private bool isAvailableForFilter(HttpContext context)
+        {
+            return (isPostRequest(context) || isPutRequest(context)) && isJsonRequest(context);
+        }
+
+        private async Task<string> getJsonRequestBody(HttpContext context)
+        {
+            using var reader = new StreamReader(context.Request.Body);
+            return await reader.ReadToEndAsync();
+        }
+
+        private void replaceRequestBodyWithJsonStream(HttpContext context, string requestBody)
+        {
+            var content = Encoding.UTF8.GetBytes(requestBody);
+            var requestBodyStream = new MemoryStream();
+            requestBodyStream.Write(content, 0, content.Length);
+            context.Request.Body = requestBodyStream;
+            context.Request.Body.Seek(0, SeekOrigin.Begin);
+        }
+
+        private void saveJsonToContextItem(HttpContext context, string jsonRequestBody)
+        {
+            context.Items["jsonBody"] = jsonRequestBody;
+        }
+
+        class HttpMethods
+        {
+            public const string POST = "POST";
+            public const string PUT = "PUT";
+        }
+
+        private bool isPostRequest(HttpContext context)
+        {
+            return context.Request.Method == HttpMethods.POST;
+        }
+
+        private bool isPutRequest(HttpContext context)
+        {
+            return context.Request.Method == HttpMethods.PUT;
+        }
+        private bool isJsonRequest(HttpContext context)
+        {
+            return context.Request.ContentType.StartsWith("application/json");
+        }
+
+
+
+
+
+
     }
 }

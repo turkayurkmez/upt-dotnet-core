@@ -11,20 +11,29 @@
 
         public async Task Invoke(HttpContext context)
         {
-            var jsonBody = (string?)context.Items["jsonBody"];
-            var badwords = new List<string> { "pis", "kaka", "kötü", "deli" };
-            if (jsonBody != null && badwords.Any(word => jsonBody.Contains(word)))
+            if (context.Items.TryGetValue("jsonBody", out object? jsonBody))
             {
-                context.Response.StatusCode = 400;
-                context.Response.ContentType = "application/json";
-                await context.Response.WriteAsJsonAsync(new { message = "Bu gönderide hoş olmayan kelimeler var!" });
+                var badwords = new List<string> { "pis", "kaka", "kötü", "deli" };
+                var jsonBodyString = (string?)jsonBody;
+                if (badwords.Any(jsonBodyString.Contains))
+                {
+                    await responseBadRequest(context);
+                    return;
 
-                return;
-
+                }
             }
 
             await _next(context);
 
+        }
+
+
+
+        private static async Task responseBadRequest(HttpContext context)
+        {
+            context.Response.StatusCode = 400;
+            context.Response.ContentType = "application/json";
+            await context.Response.WriteAsJsonAsync(new { message = "Bu gönderide hoş olmayan kelimeler var!" });
         }
     }
 }

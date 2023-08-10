@@ -5,11 +5,6 @@ namespace customMiddlewares.Middlewares
 
     public class JsonBodyMiddleware
     {
-
-
-        /*
-         * Eğer bir http request nesnesi POST metodu ile çalışmış ve bu request'de JSON bir veri varsa daha sonra işlemek üzere bu veriyi ayır!
-         */
         private readonly RequestDelegate _next;
 
         public JsonBodyMiddleware(RequestDelegate next)
